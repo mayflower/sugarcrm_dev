@@ -1044,7 +1044,16 @@ class Email extends SugarBean {
                  if (!empty($date_sent_obj) && ($date_sent_obj instanceof SugarDateTime)) {
  				    $this->date_sent = $date_sent_obj->asDb();
                  }
-			}
+			} else {
+                 //set date_entered to date_sent if this is a new email being archived
+                 //that way emails archived to sugar by plugins like opacus mail will
+                 //have the correct ordering according to email incoming date.
+                 if ($this->new_with_id) {
+                     $this->date_entered = $this->date_sent;
+                 }
+            }
+
+
 
 			parent::save($check_notify);
 
